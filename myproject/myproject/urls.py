@@ -3,8 +3,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # Enables /accounts/login/, /accounts/logout/, etc.
-    path('accounts/', include('django.contrib.auth.urls')),
-    # Connects your app's urls
-    path('', include('myapp.urls')),
+    # This maps everything in myapp.urls under the 'accounts/' path prefix
+    path('accounts/', include('myapp.urls')),
+    path('', include('myapp.urls')), # Or keep a direct root mapping if needed
 ]
