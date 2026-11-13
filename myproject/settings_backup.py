@@ -24,11 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-bj%a!4sol9p2qav(i#lh%!w*-wr-cf*@z(knhz42ii5mw1!a^v')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# Automatically set DEBUG to False if running on Render (where RENDER environment variable exists)
 DEBUG = 'RENDER' not in os.environ
 
-# Allow all host names on Render, or specify your custom domain
-ALLOWED_HOSTS = ['.onrender.com', 'localhost', '127.0.0.1']
+# Allowed hosts for Render and local development
+ALLOWED_HOSTS = ['assetlendingsystem.onrender.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -40,13 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Add your custom apps here (e.g., 'myapp')
+    # Your custom app
     'myapp',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # WhiteNoise Middleware should be right after SecurityMiddleware to serve static files efficiently
+    # WhiteNoise Middleware for serving static files efficiently in production
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -123,8 +122,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Simplified static file serving with WhiteNoise for production
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
