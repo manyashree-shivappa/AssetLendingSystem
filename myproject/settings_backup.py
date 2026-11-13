@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-bj%a!4sol9p2qav(i#lh%
 DEBUG = os.environ.get('RENDER', 'False') != 'true'
 
 # Allowed hosts for Render and local development
-ALLOWED_HOSTS = ['assetlendingsystem.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
