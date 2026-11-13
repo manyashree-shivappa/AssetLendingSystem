@@ -1,0 +1,48 @@
+{% extends 'myapp/base.html' %}
+
+{% block title %}Branch Monitoring | AssetFlow{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1>Branch Monitoring</h1>
+    <p>Monitor asset availability and usage across all branches.</p>
+</div>
+
+<div class="card">
+    <h2>Branch Performance Overview</h2>
+
+    {% if branch_data %}
+    <div style="overflow-x:auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Branch</th>
+                    <th>Branch Code</th>
+                    <th>Total Assets</th>
+                    <th>Available</th>
+                    <th>Borrowed</th>
+                    <th>Maintenance</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for item in branch_data %}
+                <tr>
+                    <td>{{ item.branch.name }}</td>
+                    <td>{{ item.branch.branch_code }}</td>
+                    <td>{{ item.total_assets }}</td>
+                    <td>{{ item.available_assets }}</td>
+                    <td>{{ item.borrowed_assets }}</td>
+                    <td>{{ item.maintenance_assets }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p>No branch information available.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

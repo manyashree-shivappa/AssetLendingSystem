@@ -1,0 +1,220 @@
+{% extends "myapp/base.html" %}
+
+{% block title %}Live GPS Tracking | AssetFlow{% endblock %}
+
+{% block content %}
+<div class="container" style="padding:25px;">
+    <h2>Live Transfer GPS Tracking</h2>
+
+    <div class="card" style="padding:20px; margin-bottom:20px;">
+        <h3>{{ transfer.asset.name }}</h3>
+        <p>
+            <strong>From:</strong> {{ transfer.from_branch.name }}
+        </p>
+        <p>
+            <strong>To:</strong> {{ transfer.to_branch.name }}
+        </p>
+        <p>
+            <strong>Status:</strong> {{ transfer.status }}
+        </p>
+
+        <button id="startGPS" type="button">
+            Start GPS Sharing
+        </button>
+
+        <button id="stopGPS" type="button" disabled>
+            Stop GPS Sharing
+        </button>
+
+        <p id="gpsStatus">GPS sharing is stopped.</p>
+        <p id="coordinates">No location received yet.</p>
+        <p id="lastUpdated"></p>
+    </div>
+
+    <div id="map"
+         style="height:450px; width:100%; border-radius:12px;">
+    </div>
+</div>
+
+<link rel="stylesheet"
+ href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+const updateUrl =
+    "{% url 'update_transfer_location' transfer.id %}";
+
+const latestUrl =
+    "{% url 'latest_transfer_location' transfer.id %}";
+
+const startButton = document.getElementById("startGPS");
+const stopButton = document.getElementById("stopGPS");
+const statusText = document.getElementById("gpsStatus");
+const coordinatesText = document.getElementById("coordinates");
+const updatedText = document.getElementById("lastUpdated");
+
+let watchId = null;
+let marker = null;
+let map = null;
+
+map = L.map("map").setView([20, 0], 2);
+
+L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+        attribution: "&copy; OpenStreetMap contributors"
+    }
+).addTo(map);
+
+function getCookie(name) {
+    const cookies = document.cookie.split(";");
+
+    for (let cookie of cookies) {
+        cookie = cookie.trim();
+
+        if (cookie.startsWith(name + "=")) {
+            return decodeURIComponent(
+                cookie.substring(name.length + 1)
+            );
+        }
+    }
+
+    return null;
+}
+
+function showLocation(lat, lng, time) {
+    const position = [lat, lng];
+
+    if (!marker) {
+        marker = L.marker(position).addTo(map);
+    } else {
+        marker.setLatLng(position);
+    }
+
+    marker.bindPopup("Latest shared location").openPopup();
+    map.setView(position, 16);
+
+    coordinatesText.textContent =
+        "Latitude: " + lat + " | Longitude: " + lng;
+
+    updatedText.textContent = "Last updated: " + time;
+}
+
+async function sendLocation(position) {
+    const data = new URLSearchParams();
+
+    data.append("latitude", position.coords.latitude);
+    data.append("longitude", position.coords.longitude);
+    data.append("accuracy", position.coords.accuracy);
+
+    try {
+        const response = await fetch(updateUrl, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken"),
+                "Content-Type":
+                    "application/x-www-form-urlencoded"
+            },
+            body: data,
+            credentials: "same-origin"
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error || "Location update failed.");
+        }
+
+        showLocation(
+            position.coords.latitude,
+            position.coords.longitude,
+            new Date().toLocaleTimeString()
+        );
+
+        statusText.textContent = "GPS sharing is active.";
+    } catch (error) {
+        statusText.textContent = error.message;
+    }
+}
+
+startButton.addEventListener("click", function () {
+    if (!navigator.geolocation) {
+        statusText.textContent =
+            "Your browser does not support GPS.";
+        return;
+    }
+
+    if (watchId !== null) return;
+
+    statusText.textContent = "Requesting location permission...";
+
+    watchId = navigator.geolocation.watchPosition(
+        sendLocation,
+        function (error) {
+            statusText.textContent =
+                "GPS error: " + error.message;
+
+            stopGPS();
+        },
+        {
+            enableHighAccuracy: true,
+            maximumAge: 5000,
+            timeout: 15000
+        }
+    );
+
+    startButton.disabled = true;
+    stopButton.disabled = false;
+});
+
+function stopGPS() {
+    if (watchId !== null) {
+        navigator.geolocation.clearWatch(watchId);
+        watchId = null;
+    }
+
+    startButton.disabled = false;
+    stopButton.disabled = true;
+    statusText.textContent = "GPS sharing is stopped.";
+}
+
+stopButton.addEventListener("click", stopGPS);
+
+async function loadLatestLocation() {
+    try {
+        const response = await fetch(latestUrl, {
+            credentials: "same-origin"
+        });
+
+        if (!response.ok) return;
+
+        const result = await response.json();
+
+        if (result.location) {
+            const location = result.location;
+
+            showLocation(
+                location.latitude,
+                location.longitude,
+                location.recorded_at
+            );
+        }
+    } catch (error) {
+        console.error("Could not load latest location", error);
+    }
+}
+
+loadLatestLocation();
+
+const pollTimer = setInterval(loadLatestLocation, 5000);
+
+window.addEventListener("beforeunload", function () {
+    if (watchId !== null) {
+        navigator.geolocation.clearWatch(watchId);
+    }
+
+    clearInterval(pollTimer);
+});
+</script>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Transfers | AssetFlow{% endblock %}
+{% block page_heading %}Asset Transfers{% endblock %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>Branch Transfers</h1>
+        <p>Track asset movement and custody between branches.</p>
+    </div>
+    <a href="{% url 'transfer_create' %}" class="primary-button">+ Record Transfer</a>
+</div>
+
+<div class="content-card">
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Asset</th>
+                    <th>From Branch</th>
+                    <th>To Branch</th>
+                    <th>Sender</th>
+                    <th>Receiver</th>
+                    <th>Recorded By</th>
+                    <th>Transfer Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transfer in transfers %}
+                <tr>
+                    <td>{{ transfer.asset.name }}</td>
+                    <td>{{ transfer.from_branch }}</td>
+                    <td>{{ transfer.to_branch }}</td>
+                    <td>{{ transfer.sender }}</td>
+                    <td>{{ transfer.receiver }}</td>
+                    <td>{{ transfer.recorded_by }}</td>
+                    <td>{{ transfer.handoff_time }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="7" class="empty-state">No transfers recorded.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

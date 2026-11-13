@@ -1,0 +1,712 @@
+/* =====================================================
+   ASSETFLOW - COMPLETE COLOURFUL WEBSITE DESIGN
+   Multi-Branch Shared Asset Lending System
+===================================================== */
+
+/* 1. COLOUR PALETTE */
+
+:root {
+    --purple: #6842c2;
+    --purple-dark: #43277f;
+    --purple-light: #eee8ff;
+    --teal: #16a69a;
+    --teal-light: #e0f7f4;
+    --orange: #f39a42;
+    --orange-light: #fff0dc;
+    --pink: #e96d91;
+    --pink-light: #ffe6ee;
+    --green: #219b68;
+    --green-light: #dcf7e9;
+    --red: #df5260;
+    --red-light: #ffe3e7;
+
+    --background: #f6f4fb;
+    --white: #ffffff;
+    --text: #29243d;
+    --muted: #817c91;
+    --border: #e9e5f0;
+
+    --shadow: 0 8px 25px rgba(65, 44, 110, 0.08);
+    --radius: 15px;
+}
+
+/* 2. GLOBAL SETTINGS */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--background);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+img {
+    max-width: 100%;
+}
+
+/* 3. MAIN WEBSITE LAYOUT */
+
+.app-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.main-area {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    padding: 30px;
+    flex: 1;
+}
+
+/* 4. SIDEBAR */
+
+.sidebar,
+.navigation {
+    width: 245px;
+    flex-shrink: 0;
+    min-height: 100vh;
+    background: linear-gradient(
+        180deg,
+        #43277f 0%,
+        #6040ad 55%,
+        #7652ca 100%
+    );
+    color: white;
+}
+
+.sidebar h2 {
+    color: white;
+    font-size: 24px;
+    letter-spacing: 0.5px;
+}
+
+.sidebar p {
+    color: #e5dcff;
+}
+
+.sidebar nav,
+.navigation {
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar a,
+.navigation a {
+    display: block;
+    padding: 13px 18px;
+    margin: 5px 12px;
+    border-radius: 10px;
+    color: white;
+    font-size: 14px;
+    transition: all 0.25s ease;
+}
+
+.sidebar a:hover,
+.navigation a:hover {
+    background: rgba(255,255,255,0.18);
+    transform: translateX(4px);
+}
+
+.sidebar a.active,
+.navigation a.active {
+    background: rgba(255,255,255,0.24);
+}
+
+/* 5. TOP HEADER */
+
+.topbar,
+header {
+    background: var(--white);
+    padding: 18px 25px;
+    border-bottom: 1px solid var(--border);
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.topbar h2 {
+    color: var(--purple-dark);
+    font-size: 21px;
+    margin: 0;
+}
+
+.topbar p {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* 6. HEADINGS AND TEXT */
+
+h1 {
+    font-size: 29px;
+    color: var(--purple-dark);
+    margin-bottom: 10px;
+}
+
+h2 {
+    font-size: 23px;
+    margin-bottom: 12px;
+}
+
+h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+p {
+    color: var(--muted);
+}
+
+.page-description {
+    margin-bottom: 25px;
+}
+
+/* 7. DASHBOARD GRID */
+
+.dashboard-grid,
+.stats-grid,
+.grid {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(190px, 1fr)
+    );
+    gap: 20px;
+}
+
+/* 8. DASHBOARD CARDS */
+
+.card,
+.stat-card,
+.dashboard-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 23px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    margin-bottom: 18px;
+    transition: transform 0.25s ease,
+                box-shadow 0.25s ease;
+}
+
+.card:hover,
+.stat-card:hover,
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(65,44,110,0.13);
+}
+
+.stat-card:nth-child(4n+1) {
+    border-top: 4px solid var(--purple);
+}
+
+.stat-card:nth-child(4n+2) {
+    border-top: 4px solid var(--teal);
+}
+
+.stat-card:nth-child(4n+3) {
+    border-top: 4px solid var(--orange);
+}
+
+.stat-card:nth-child(4n) {
+    border-top: 4px solid var(--pink);
+}
+
+.stat-card h2 {
+    font-size: 32px;
+    color: var(--purple);
+    margin: 8px 0;
+}
+
+.stat-card p {
+    font-size: 14px;
+}
+
+/* 9. COLOURFUL CARD VARIATIONS */
+
+.card-purple {
+    border-left: 5px solid var(--purple);
+}
+
+.card-teal {
+    border-left: 5px solid var(--teal);
+}
+
+.card-orange {
+    border-left: 5px solid var(--orange);
+}
+
+.card-pink {
+    border-left: 5px solid var(--pink);
+}
+
+.card-green {
+    border-left: 5px solid var(--green);
+}
+
+/* 10. BUTTONS */
+
+button,
+.btn,
+input[type="submit"] {
+    display: inline-block;
+    background: var(--purple);
+    color: white;
+    padding: 11px 20px;
+    border: none;
+    border-radius: 9px;
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
+
+button:hover,
+.btn:hover,
+input[type="submit"]:hover {
+    background: var(--purple-dark);
+    transform: translateY(-2px);
+}
+
+.btn-success {
+    background: var(--green);
+}
+
+.btn-success:hover {
+    background: #14774e;
+}
+
+.btn-danger {
+    background: var(--red);
+}
+
+.btn-danger:hover {
+    background: #bd354b;
+}
+
+.btn-warning {
+    background: var(--orange);
+}
+
+.btn-warning:hover {
+    background: #d77a21;
+}
+
+.btn-secondary {
+    background: var(--teal);
+}
+
+.btn-secondary:hover {
+    background: #087e75;
+}
+
+.btn-pink {
+    background: var(--pink);
+}
+
+.btn-pink:hover {
+    background: #c84b72;
+}
+
+/* 11. FORMS */
+
+form {
+    background: var(--white);
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin: 14px 0 6px;
+    color: var(--text);
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 9px;
+    outline: none;
+    background: white;
+    color: var(--text);
+    transition: border 0.2s, box-shadow 0.2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px rgba(104,66,194,0.12);
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* 12. TABLES */
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    background: white;
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+th {
+    background: var(--purple-light);
+    color: var(--purple-dark);
+    text-align: left;
+    padding: 15px;
+    font-size: 14px;
+}
+
+td {
+    padding: 14px 15px;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+}
+
+tbody tr:hover td {
+    background: #faf8ff;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+/* 13. STATUS BADGES */
+
+.badge,
+.status {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    background: var(--purple-light);
+    color: var(--purple-dark);
+}
+
+.status-available,
+.badge-success {
+    background: var(--green-light);
+    color: #16804f;
+}
+
+.status-borrowed,
+.status-pending,
+.badge-warning {
+    background: var(--orange-light);
+    color: #a5680b;
+}
+
+.status-rejected,
+.badge-danger {
+    background: var(--red-light);
+    color: #bd354b;
+}
+
+.status-maintenance {
+    background: var(--pink-light);
+    color: #b63d69;
+}
+
+.status-returned {
+    background: var(--teal-light);
+    color: #087e75;
+}
+
+/* 14. ALERT MESSAGES */
+
+.message,
+.alert {
+    padding: 13px 17px;
+    border-radius: 10px;
+    margin: 12px 0;
+    background: var(--purple-light);
+    color: var(--purple-dark);
+}
+
+.message.success,
+.alert-success {
+    background: var(--green-light);
+    color: #16804f;
+}
+
+.message.error,
+.alert-error {
+    background: var(--red-light);
+    color: #bd354b;
+}
+
+.message.warning,
+.alert-warning {
+    background: var(--orange-light);
+    color: #a5680b;
+}
+
+/* 15. LOGIN AND REGISTRATION */
+
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: linear-gradient(
+        135deg,
+        #e9ddff,
+        #fce5ed,
+        #dff8f4
+    );
+}
+
+.login-card {
+    width: 100%;
+    max-width: 430px;
+    padding: 35px;
+    background: white;
+    border-radius: 22px;
+    box-shadow: 0 15px 45px rgba(67,39,127,0.16);
+}
+
+.login-card h1 {
+    text-align: center;
+    color: var(--purple);
+    margin-bottom: 8px;
+}
+
+.login-card p {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login-card button,
+.login-card input[type="submit"] {
+    width: 100%;
+    margin-top: 18px;
+}
+
+/* 16. SEARCH AND FILTER */
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    box-shadow: none;
+    padding: 12px 0;
+    background: transparent;
+}
+
+.search-form input,
+.search-form select {
+    flex: 1;
+    min-width: 150px;
+}
+
+/* 17. EMPTY STATES */
+
+.empty-state {
+    text-align: center;
+    padding: 45px 20px;
+    background: white;
+    border-radius: 15px;
+    color: var(--muted);
+}
+
+.empty-state h3 {
+    color: var(--purple);
+    margin-bottom: 8px;
+}
+
+/* 18. FOOTER */
+
+footer {
+    background: white;
+    border-top: 1px solid var(--border);
+    padding: 20px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* 19. UTILITY CLASSES */
+
+.text-purple {
+    color: var(--purple);
+}
+
+.text-teal {
+    color: var(--teal);
+}
+
+.text-orange {
+    color: var(--orange);
+}
+
+.text-pink {
+    color: var(--pink);
+}
+
+.text-green {
+    color: var(--green);
+}
+
+.text-danger {
+    color: var(--red);
+}
+
+.mt-1 {
+    margin-top: 10px;
+}
+
+.mt-2 {
+    margin-top: 20px;
+}
+
+.mb-1 {
+    margin-bottom: 10px;
+}
+
+.mb-2 {
+    margin-bottom: 20px;
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* 20. RESPONSIVE DESIGN */
+
+@media (max-width: 992px) {
+    .sidebar,
+    .navigation {
+        width: 210px;
+    }
+
+    .main-content {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .app-layout {
+        display: block;
+    }
+
+    .sidebar,
+    .navigation {
+        width: 100%;
+        min-height: auto;
+    }
+
+    .sidebar nav,
+    .navigation {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .main-content {
+        padding: 15px;
+    }
+
+    .dashboard-grid,
+    .stats-grid,
+    .grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .topbar {
+        padding: 15px;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    table {
+        min-width: 600px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dashboard-grid,
+    .stats-grid,
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    h1 {
+        font-size: 23px;
+    }
+
+    .login-card {
+        padding: 23px;
+    }
+
+    .main-content {
+        padding: 12px;
+    }
+}

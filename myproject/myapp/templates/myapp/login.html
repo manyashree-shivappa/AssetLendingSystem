@@ -1,0 +1,302 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome | AssetFlow</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #25145c, #4935a5, #8b5cf6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 430px;
+            background: white;
+            padding: 35px;
+            border-radius: 22px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .brand h1 {
+            color: #5636b5;
+            font-size: 32px;
+        }
+
+        .brand p {
+            color: #777;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        h2 {
+            color: #282044;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 7px;
+            color: #39334c;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 9px;
+            outline: none;
+            font-size: 15px;
+        }
+
+        input:focus, select:focus {
+            border-color: #7950d8;
+        }
+
+        .login-btn, .continue-btn {
+            width: 100%;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #6241c5, #9b59e8);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 22px;
+        }
+
+        .login-btn:hover, .continue-btn:hover {
+            opacity: 0.9;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .register-link a {
+            color: #6846c4;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .message {
+            background: #f2edff;
+            color: #51349d;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        /* Welcome popup */
+
+        .welcome-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(18, 12, 43, 0.78);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .welcome-box {
+            background: white;
+            width: 100%;
+            max-width: 480px;
+            border-radius: 24px;
+            padding: 38px 30px;
+            text-align: center;
+            animation: appear 0.4s ease;
+        }
+
+        .welcome-icon {
+            width: 75px;
+            height: 75px;
+            margin: 0 auto 20px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, #6d4bd1, #b56de9);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+        }
+
+        .welcome-box h1 {
+            color: #5838b2;
+            font-size: 29px;
+            margin-bottom: 12px;
+        }
+
+        .welcome-box h3 {
+            color: #30264c;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .welcome-box p {
+            color: #777;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        .welcome-features {
+            background: #f6f2ff;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 20px;
+            color: #59438d;
+            font-size: 13px;
+            line-height: 1.9;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media(max-width: 480px) {
+            .login-container {
+                padding: 25px;
+            }
+
+            .welcome-box {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Welcome Popup -->
+
+    <div class="welcome-overlay" id="welcomePopup">
+        <div class="welcome-box">
+
+            <div class="welcome-icon">✦</div>
+
+            <h1>Welcome to AssetFlow!</h1>
+
+            <h3>Multi-Branch Shared Asset Lending System</h3>
+
+            <p>
+                A smarter way to manage, share and track assets
+                across multiple branches.
+            </p>
+
+            <div class="welcome-features">
+                ✓ Centralized Asset Management<br>
+                ✓ Easy Asset Requests and Approvals<br>
+                ✓ Branch-to-Branch Transfers<br>
+                ✓ Returns and Overdue Tracking
+            </div>
+
+            <button class="continue-btn"
+                    type="button"
+                    onclick="closeWelcome()">
+                Continue to Login →
+            </button>
+
+        </div>
+    </div>
+
+    <!-- Login Form -->
+
+    <div class="login-container">
+
+        <div class="brand">
+            <h1>AssetFlow</h1>
+            <p>Multi-Branch Asset Management</p>
+        </div>
+
+        <h2>Sign In</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <label>Username</label>
+            <input
+                type="text"
+                name="username"
+                placeholder="Enter your username"
+                required
+            >
+
+            <label>Password</label>
+            <input
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+            >
+
+            <label>Select Your Role</label>
+            <select name="role" required>
+                <option value="">Choose your role</option>
+                <option value="ADMIN">Admin</option>
+                <option value="MANAGER">Manager</option>
+                <option value="STAFF">Branch Staff</option>
+            </select>
+
+            <button type="submit" class="login-btn">
+                Sign In
+            </button>
+        </form>
+
+        <div class="register-link">
+            New Branch Staff?
+            <a href="{% url 'register' %}">Create Account</a>
+        </div>
+
+    </div>
+
+    <script>
+        function closeWelcome() {
+            document.getElementById("welcomePopup").style.display = "none";
+        }
+    </script>
+
+</body>
+</html>

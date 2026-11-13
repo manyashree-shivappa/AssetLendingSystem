@@ -1,0 +1,152 @@
+{% extends 'myapp/base.html' %}
+
+{% block title %}Asset Catalogue | AssetFlow{% endblock %}
+
+{% block page_heading %}Asset Catalogue{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>Asset Catalogue</h1>
+        <p>Search and explore assets across all branches.</p>
+    </div>
+
+    {% if user_role == "ADMIN" %}
+    <a href="{% url 'asset_add' %}" class="primary-button">
+        + Add New Asset
+    </a>
+    {% endif %}
+</div>
+
+<div class="content-card">
+
+    <h2>Search and Filter Assets</h2>
+
+    <form method="GET" class="filter-form">
+
+        <input
+            type="search"
+            name="q"
+            value="{{ search_query }}"
+            placeholder="Search asset name or code"
+        >
+
+        <select name="category">
+            <option value="">All Categories</option>
+
+            {% for category in categories %}
+                <option
+                    value="{{ category.id }}"
+                    {% if selected_category == category.id|stringformat:"s" %}
+                        selected
+                    {% endif %}
+                >
+                    {{ category.name }}
+                </option>
+            {% empty %}
+                <option value="">No categories available</option>
+            {% endfor %}
+
+        </select>
+
+        <select name="status">
+            <option value="">All Statuses</option>
+
+            <option value="AVAILABLE"
+                {% if selected_status == "AVAILABLE" %}selected{% endif %}>
+                Available
+            </option>
+
+            <option value="BORROWED"
+                {% if selected_status == "BORROWED" %}selected{% endif %}>
+                Borrowed
+            </option>
+
+            <option value="MAINTENANCE"
+                {% if selected_status == "MAINTENANCE" %}selected{% endif %}>
+                Maintenance
+            </option>
+        </select>
+
+        <button type="submit" class="primary-button">
+            Search
+        </button>
+
+        <a href="{% url 'assets' %}" class="secondary-button">
+            Clear
+        </a>
+
+    </form>
+</div>
+
+
+<div class="content-card">
+
+    <h2>Registered Assets</h2>
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Asset Code</th>
+                    <th>Asset Name</th>
+                    <th>Category</th>
+                    <th>Branch</th>
+                    <th>Condition</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for asset in assets %}
+
+                <tr>
+                    <td>{{ asset.asset_code }}</td>
+
+                    <td>{{ asset.name }}</td>
+
+                    <td>{{ asset.category.name }}</td>
+
+                    <td>{{ asset.branch.name }}</td>
+
+                    <td>{{ asset.condition }}</td>
+
+                    <td>
+                        <span class="status-badge">
+                            {{ asset.get_status_display }}
+                        </span>
+                    </td>
+
+                    <td>
+                        <a
+                            href="{% url 'asset_detail' asset.id %}"
+                            class="table-link">
+                            View
+                        </a>
+                    </td>
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="7" class="empty-state">
+                        No assets found.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}

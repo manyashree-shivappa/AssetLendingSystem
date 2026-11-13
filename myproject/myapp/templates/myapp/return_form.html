@@ -1,0 +1,65 @@
+{% extends 'myapp/base.html' %}
+
+{% block title %}Record Asset Return | AssetFlow{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1>Record Asset Return</h1>
+    <p>Review the asset condition before completing the return.</p>
+</div>
+
+<div class="card">
+    <h2>Asset Information</h2>
+
+    <p><strong>Asset Code:</strong> {{ loan.asset.asset_code }}</p>
+    <p><strong>Asset Name:</strong> {{ loan.asset.name }}</p>
+    <p><strong>Borrower:</strong> {{ loan.borrower.username }}</p>
+    <p><strong>Branch:</strong> {{ loan.branch.name }}</p>
+    <p><strong>Due Date:</strong> {{ loan.due_date }}</p>
+</div>
+
+<div class="card">
+    <h2>Return Details</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label for="return_condition">
+            Return Condition
+        </label>
+
+        <select name="return_condition" id="return_condition" required>
+            <option value="">Select condition</option>
+            <option value="NEW">New</option>
+            <option value="GOOD">Good</option>
+            <option value="DAMAGED">Damaged</option>
+            <option value="UNDER_MAINTENANCE">Under Maintenance</option>
+        </select>
+
+        <br><br>
+
+        <label for="notes">
+            Return Notes
+        </label>
+
+        <textarea
+            name="notes"
+            id="notes"
+            rows="4"
+            placeholder="Enter return remarks..."
+        ></textarea>
+
+        <br><br>
+
+        <button type="submit">
+            Confirm Return
+        </button>
+
+        <a href="{% url 'returns' %}">
+            Cancel
+        </a>
+    </form>
+</div>
+
+{% endblock %}

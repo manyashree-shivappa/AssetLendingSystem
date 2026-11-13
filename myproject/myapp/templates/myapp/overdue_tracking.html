@@ -1,0 +1,59 @@
+{% extends 'myapp/base.html' %}
+
+{% block title %}Overdue Tracking | AssetFlow{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1>Overdue Asset Tracking</h1>
+    <p>Monitor assets that have not been returned by their due dates.</p>
+</div>
+
+<div class="card">
+    <h2>Overdue Summary</h2>
+
+    <div class="stat-card">
+        <h3>{{ overdue_count }}</h3>
+        <p>Overdue Assets</p>
+    </div>
+</div>
+
+<div class="card">
+    <h2>Overdue Loan Records</h2>
+
+    {% if overdue_loans %}
+    <div style="overflow-x:auto;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Asset Code</th>
+                    <th>Asset Name</th>
+                    <th>Borrower</th>
+                    <th>Branch</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for loan in overdue_loans %}
+                <tr>
+                    <td>{{ loan.asset.asset_code }}</td>
+                    <td>{{ loan.asset.name }}</td>
+                    <td>{{ loan.borrower.username }}</td>
+                    <td>{{ loan.branch.name }}</td>
+                    <td>{{ loan.due_date|date:"d M Y" }}</td>
+                    <td>
+                        <span class="badge">Overdue</span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p>No overdue assets found.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

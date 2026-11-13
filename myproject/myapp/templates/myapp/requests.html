@@ -1,0 +1,48 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Asset Requests | AssetFlow{% endblock %}
+{% block page_heading %}Asset Requests{% endblock %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>Asset Requests</h1>
+        <p>Track asset requests and approval status.</p>
+    </div>
+    <a href="{% url 'request_create' %}" class="primary-button">+ New Request</a>
+</div>
+
+<div class="content-card">
+    <h2>{% if user_role == "ADMIN" %}All Requests{% else %}My Requests{% endif %}</h2>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Request ID</th>
+                    <th>Asset</th>
+                    <th>Requested By</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                    <th>Submitted</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in requests %}
+                <tr>
+                    <td>#{{ item.id }}</td>
+                    <td>{{ item.asset.name }}</td>
+                    <td>{{ item.requested_by.username }}</td>
+                    <td>{{ item.start_date }}</td>
+                    <td>{{ item.end_date }}</td>
+                    <td><span class="status-badge">{{ item.status }}</span></td>
+                    <td>{{ item.created_at|date:"d M Y" }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="7" class="empty-state">No requests available.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

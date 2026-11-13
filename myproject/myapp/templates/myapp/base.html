@@ -1,0 +1,146 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AssetFlow{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'myapp/css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+{% if user.is_authenticated %}
+
+<div class="app-layout">
+
+    <aside class="sidebar">
+
+        <div style="padding:25px 20px;">
+            <h2 style="color:white; margin:0;">✦ AssetFlow</h2>
+            <p style="color:#e5dcff; font-size:13px;">
+                Smart Asset Operations
+            </p>
+        </div>
+
+        <nav>
+
+            <a href="{% url 'dashboard' %}">▦ Dashboard</a>
+
+            <a href="{% url 'assets' %}">▣ Asset Catalogue</a>
+
+            {% if user.is_superuser or user.profile.role == "ADMIN" %}
+
+                <a href="{% url 'requests' %}">♧ All Requests</a>
+                <a href="{% url 'approvals' %}">✓ Approvals</a>
+                <a href="{% url 'transfers' %}">⇄ Transfers</a>
+                <a href="{% url 'returns' %}">↩ Returns</a>
+                <a href="{% url 'branches' %}">⌂ Branch Management</a>
+                <a href="{% url 'reports' %}">▤ Reports</a>
+
+            {% elif user.profile.role == "MANAGER" %}
+
+                <a href="{% url 'branch_monitoring' %}">
+                    🏢 Branch Monitoring
+                </a>
+
+                <a href="{% url 'overdue_tracking' %}">
+                    ⏰ Overdue Tracking
+                </a>
+
+                <a href="{% url 'transfers' %}">
+                    ⇄ Transfer Monitoring
+                </a>
+
+                <a href="{% url 'reports' %}">
+                    ▤ Reports & Analytics
+                </a>
+
+            {% elif user.profile.role == "STAFF" %}
+
+                <a href="{% url 'requests' %}">♧ My Requests</a>
+                <a href="{% url 'transfers' %}">⇄ Transfers</a>
+                <a href="{% url 'returns' %}">↩ Returns</a>
+
+            {% endif %}
+
+        </nav>
+
+        <div style="padding:20px; margin-top:30px;">
+
+            <p style="color:#e5dcff; font-size:13px;">
+                Logged in as
+            </p>
+
+            <strong style="color:white;">
+                {{ user.username }}
+            </strong>
+
+            <a href="{% url 'logout' %}"
+               style="background:#e96d91; margin:15px 0 0;">
+                ↪ Logout
+            </a>
+
+        </div>
+
+    </aside>
+
+    <div class="main-area">
+
+        <header class="topbar">
+
+            <div>
+                <h2 style="margin:0;">Welcome to AssetFlow</h2>
+                <p style="margin:0;">
+                    Multi-Branch Shared Asset Lending System
+                </p>
+            </div>
+
+            <div>
+                <span class="badge">
+                    {% if user.is_superuser %}
+                        Admin
+                    {% else %}
+                        {{ user.profile.get_role_display }}
+                    {% endif %}
+                </span>
+            </div>
+
+        </header>
+
+        <main class="main-content">
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% block content %}{% endblock %}
+
+        </main>
+
+        <footer style="text-align:center; padding:20px; color:#817c91;">
+            © {% now "Y" %} AssetFlow | Smart Asset Operations
+        </footer>
+
+    </div>
+
+</div>
+
+{% else %}
+
+    {% block public_content %}{% endblock %}
+
+{% endif %}
+
+<script src="{% static 'myapp/js/main.js' %}"></script>
+
+{% block extra_js %}{% endblock %}
+
+</body>
+</html>

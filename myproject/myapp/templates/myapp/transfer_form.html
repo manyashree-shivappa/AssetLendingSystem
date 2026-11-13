@@ -1,0 +1,98 @@
+{% extends 'myapp/base.html' %}
+
+{% block title %}Create Branch Transfer | AssetFlow{% endblock %}
+
+{% block page_heading %}Create Branch Transfer{% endblock %}
+
+{% block content %}
+
+<div class="content-card">
+
+    <h2>Approved Requests Ready for Transfer</h2>
+
+    <p>
+        Select an approved request to arrange delivery
+        to the requesting staff member's branch.
+    </p>
+
+    <form method="POST" class="form-container">
+
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="request_id">Approved Request</label>
+
+            <select name="request_id" id="request_id" required>
+
+                <option value="">Select approved request</option>
+
+                {% for item in approved_requests %}
+
+                    <option value="{{ item.id }}">
+                        Request #{{ item.id }} -
+                        {{ item.asset.name }} -
+                        {{ item.asset.asset_code }} -
+                        From: {{ item.asset.branch.name }} -
+                        To: {{ item.requested_by.profile.branch.name }}
+                    </option>
+
+                {% empty %}
+
+                    <option value="" disabled>
+                        No approved requests available
+                    </option>
+
+                {% endfor %}
+
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="sender">Sender Name</label>
+            <input
+                type="text"
+                name="sender"
+                id="sender"
+                placeholder="Enter sender name"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="receiver">Receiver Name</label>
+            <input
+                type="text"
+                name="receiver"
+                id="receiver"
+                placeholder="Enter receiver name"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="notes">Transfer Notes</label>
+            <textarea
+                name="notes"
+                id="notes"
+                rows="4"
+                placeholder="Optional transfer details"
+            ></textarea>
+        </div>
+
+        <div class="form-actions">
+
+            <button type="submit" class="primary-button">
+                Create Transfer
+            </button>
+
+            <a href="{% url 'transfers' %}" class="secondary-button">
+                Cancel
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+{% endblock %}

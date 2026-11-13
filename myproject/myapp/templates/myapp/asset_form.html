@@ -1,0 +1,56 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Manage Asset | AssetFlow{% endblock %}
+{% block page_heading %}Manage Asset{% endblock %}
+{% block content %}
+
+<div class="form-container">
+    <div class="content-card">
+        <h1>{% if asset %}Update Asset{% else %}Add New Asset{% endif %}</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <label for="asset_code">Asset Code</label>
+            <input id="asset_code" name="asset_code" value="{{ asset.asset_code|default:'' }}" required>
+
+            <label for="name">Asset Name</label>
+            <input id="name" name="name" value="{{ asset.name|default:'' }}" required>
+
+            <label for="category">Category</label>
+            <select id="category" name="category" required>
+                <option value="">Select Category</option>
+                {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="branch">Branch</label>
+            <select id="branch" name="branch" required>
+                <option value="">Select Branch</option>
+                {% for branch in branches %}
+                <option value="{{ branch.id }}">{{ branch.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="condition">Condition</label>
+            <select id="condition" name="condition" required>
+                <option value="NEW">New</option>
+                <option value="GOOD">Good</option>
+                <option value="DAMAGED">Damaged</option>
+                <option value="UNDER_MAINTENANCE">Under Maintenance</option>
+            </select>
+
+            <label for="status">Status</label>
+            <select id="status" name="status" required>
+                <option value="AVAILABLE">Available</option>
+                <option value="MAINTENANCE">Maintenance</option>
+            </select>
+
+            <div class="form-actions">
+                <button type="submit" class="primary-button">Save Asset</button>
+                <a href="{% url 'assets' %}" class="secondary-button">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

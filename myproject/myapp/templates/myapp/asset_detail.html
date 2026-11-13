@@ -1,0 +1,33 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Asset Details | AssetFlow{% endblock %}
+{% block page_heading %}Asset Details{% endblock %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>{{ asset.name }}</h1>
+        <p>Asset Code: {{ asset.asset_code }}</p>
+    </div>
+    <a href="{% url 'assets' %}" class="secondary-button">Back to Assets</a>
+</div>
+
+<div class="content-card">
+    <h2>Asset Information</h2>
+    <div class="details-grid">
+        <div class="detail-item"><span>Asset Code</span><strong>{{ asset.asset_code }}</strong></div>
+        <div class="detail-item"><span>Asset Name</span><strong>{{ asset.name }}</strong></div>
+        <div class="detail-item"><span>Category</span><strong>{{ asset.category }}</strong></div>
+        <div class="detail-item"><span>Current Branch</span><strong>{{ asset.branch }}</strong></div>
+        <div class="detail-item"><span>Condition</span><strong>{{ asset.condition }}</strong></div>
+        <div class="detail-item"><span>Status</span><strong>{{ asset.status }}</strong></div>
+    </div>
+
+    {% if asset.status == "AVAILABLE" %}
+    <a href="{% url 'request_create' %}?asset={{ asset.id }}" class="primary-button">
+        Request This Asset
+    </a>
+    {% else %}
+    <p class="notice">This asset is currently unavailable.</p>
+    {% endif %}
+</div>
+{% endblock %}

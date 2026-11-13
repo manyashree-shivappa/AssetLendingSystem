@@ -1,0 +1,83 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Dashboard | AssetFlow{% endblock %}
+{% block page_heading %}Dashboard{% endblock %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>Welcome to AssetFlow</h1>
+        <p>Manage shared assets across all branches.</p>
+    </div>
+    <span class="role-label">{{ user_role }}</span>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <span>Total Assets</span>
+        <h2>{{ total_assets|default:0 }}</h2>
+        <p>Registered assets</p>
+    </div>
+    <div class="stat-card">
+        <span>Available Assets</span>
+        <h2>{{ available_assets|default:0 }}</h2>
+        <p>Ready for requests</p>
+    </div>
+    <div class="stat-card">
+        <span>Borrowed Assets</span>
+        <h2>{{ borrowed_assets|default:0 }}</h2>
+        <p>Currently checked out</p>
+    </div>
+    <div class="stat-card">
+        <span>Pending Requests</span>
+        <h2>{{ pending_requests|default:0 }}</h2>
+        <p>Awaiting approval</p>
+    </div>
+
+    {% if user_role == "ADMIN" or user_role == "MANAGER" %}
+    <div class="stat-card">
+        <span>Total Branches</span>
+        <h2>{{ total_branches|default:0 }}</h2>
+        <p>Connected branches</p>
+    </div>
+    <div class="stat-card">
+        <span>Overdue Assets</span>
+        <h2>{{ overdue_assets|default:0 }}</h2>
+        <p>Require attention</p>
+    </div>
+    {% endif %}
+</div>
+
+<div class="dashboard-grid">
+    <div class="content-card">
+        <h2>Quick Actions</h2>
+        <div class="quick-actions">
+            <a href="{% url 'assets' %}" class="action-link">Browse Assets</a>
+            <a href="{% url 'request_create' %}" class="action-link">Request Asset</a>
+            <a href="{% url 'transfers' %}" class="action-link">View Transfers</a>
+            <a href="{% url 'returns' %}" class="action-link">View Returns</a>
+
+            {% if user_role == "ADMIN" %}
+            <a href="{% url 'approvals' %}" class="action-link">Review Approvals</a>
+            <a href="{% url 'branches' %}" class="action-link">Manage Branches</a>
+            {% endif %}
+
+            {% if user_role == "ADMIN" or user_role == "MANAGER" %}
+            <a href="{% url 'reports' %}" class="action-link">View Reports</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="content-card">
+        <h2>Asset Operations Workflow</h2>
+        <ol class="workflow-list">
+            <li>Search for an available asset.</li>
+            <li>Submit a request with the required dates.</li>
+            <li>Admin reviews and approves the request.</li>
+            <li>Asset checkout and custody are recorded.</li>
+            <li>Transfers and returns are logged.</li>
+            <li>Overdue assets are flagged for attention.</li>
+        </ol>
+    </div>
+</div>
+
+{% endblock %}

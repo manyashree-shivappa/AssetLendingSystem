@@ -1,0 +1,129 @@
+{% extends 'myapp/base.html' %}
+
+{% block title %}Register | AssetFlow{% endblock %}
+
+{% block public_content %}
+
+<div class="auth-page">
+
+    <div class="auth-card register-card">
+
+        <!-- Brand -->
+        <div class="auth-brand">
+            <div class="brand-icon">A</div>
+            <h1>AssetFlow</h1>
+            <p>One workspace. Every branch. Every asset.</p>
+        </div>
+
+        <!-- Heading -->
+        <div class="auth-heading">
+            <h2>Create Your Account</h2>
+            <p>Register to access your branch's shared assets.</p>
+        </div>
+
+        <!-- Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Registration Form -->
+        <form method="POST" action="{% url 'register' %}">
+
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="username">Username</label>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Choose a username"
+                    autocomplete="username"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email address"
+                    autocomplete="email"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="branch">Select Your Branch</label>
+
+                <select id="branch" name="branch" required>
+                    <option value="">Choose your branch</option>
+
+                    {% for branch in branches %}
+                        <option value="{{ branch.id }}">
+                            {{ branch.name }}
+                        </option>
+                    {% endfor %}
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="password1">Create Password</label>
+
+                <input
+                    type="password"
+                    id="password1"
+                    name="password1"
+                    placeholder="Create a password"
+                    autocomplete="new-password"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password2">Confirm Password</label>
+
+                <input
+                    type="password"
+                    id="password2"
+                    name="password2"
+                    placeholder="Enter your password again"
+                    autocomplete="new-password"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="primary-button login-button">
+                Create Account
+            </button>
+
+        </form>
+
+        <!-- Login Link -->
+        <div class="auth-footer">
+            <p>
+                Already have an account?
+                <a href="{% url 'login' %}">Sign In</a>
+            </p>
+        </div>
+
+        <!-- Security Notice -->
+        <div class="security-note">
+            New registrations receive Branch Staff access.
+            Admin and Manager accounts must be assigned by an authorized administrator.
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

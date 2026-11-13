@@ -1,0 +1,65 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Reports | AssetFlow{% endblock %}
+{% block page_heading %}Reports and Analytics{% endblock %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>Reports and Analytics</h1>
+        <p>Monitor asset utilization and branch accountability.</p>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <span>Total Assets</span>
+        <h2>{{ total_assets|default:0 }}</h2>
+    </div>
+    <div class="stat-card">
+        <span>Available Assets</span>
+        <h2>{{ available_assets|default:0 }}</h2>
+    </div>
+    <div class="stat-card">
+        <span>Active Loans</span>
+        <h2>{{ borrowed_assets|default:0 }}</h2>
+    </div>
+    <div class="stat-card">
+        <span>Overdue Assets</span>
+        <h2>{{ overdue_assets|default:0 }}</h2>
+    </div>
+</div>
+
+<div class="content-card">
+    <h2>Branch Activity</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Branch</th>
+                    <th>Total Assets</th>
+                    <th>Available Assets</th>
+                    <th>Active Loans</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for branch in branch_reports %}
+                <tr>
+                    <td>{{ branch.name }}</td>
+                    <td>{{ branch.total_assets }}</td>
+                    <td>{{ branch.available_assets }}</td>
+                    <td>{{ branch.active_loans }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="empty-state">No branch report data available.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="content-card">
+    <h2>Asset Utilization</h2>
+    <p>Asset utilization data will be calculated from recorded loans and asset availability.</p>
+</div>
+
+{% endblock %}

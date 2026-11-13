@@ -1,0 +1,42 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Request Asset | AssetFlow{% endblock %}
+{% block page_heading %}Request an Asset{% endblock %}
+{% block content %}
+
+<div class="form-container">
+    <div class="content-card">
+        <h1>New Asset Request</h1>
+        <p class="muted">Select an asset and provide your required dates.</p>
+
+        <form method="POST" action="{% url 'request_create' %}">
+            {% csrf_token %}
+
+            <label for="asset">Select Asset</label>
+            <select id="asset" name="asset" required>
+                <option value="">Choose an available asset</option>
+                {% for asset in assets %}
+                <option value="{{ asset.id }}"
+                    {% if selected_asset == asset.id %}selected{% endif %}>
+                    {{ asset.asset_code }} - {{ asset.name }} ({{ asset.branch }})
+                </option>
+                {% endfor %}
+            </select>
+
+            <label for="start_date">Required From</label>
+            <input type="date" id="start_date" name="start_date" required>
+
+            <label for="end_date">Required Until</label>
+            <input type="date" id="end_date" name="end_date" required>
+
+            <label for="purpose">Purpose of Request</label>
+            <textarea id="purpose" name="purpose" rows="4" required
+                      placeholder="Explain why you need this asset"></textarea>
+
+            <div class="form-actions">
+                <button type="submit" class="primary-button">Submit Request</button>
+                <a href="{% url 'requests' %}" class="secondary-button">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

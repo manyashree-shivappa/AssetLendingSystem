@@ -1,0 +1,83 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Returns | AssetFlow{% endblock %}
+{% block page_heading %}Asset Returns{% endblock %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>Asset Returns</h1>
+        <p>Track active loans and completed returns.</p>
+    </div>
+</div>
+
+<div class="content-card">
+    <h2>Active Loans</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Asset</th>
+                    <th>Borrower</th>
+                    <th>Checkout Date</th>
+                    <th>Due Date</th>
+                    <th>Return Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for loan in loans %}
+                <tr>
+                    <td>{{ loan.asset.name }}</td>
+                    <td>{{ loan.borrower.username }}</td>
+                    <td>{{ loan.checkout_date }}</td>
+                    <td>{{ loan.due_date }}</td>
+                    <td>
+                        {% if loan.is_overdue %}
+                        <span class="status-badge overdue">Overdue</span>
+                        {% else %}
+                        <span class="status-badge">Active</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <form method="POST" action="{% url 'mark_return' loan.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="primary-button">Record Return</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6" class="empty-state">No active loans found.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="content-card">
+    <h2>Completed Returns</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Asset</th>
+                    <th>Received By</th>
+                    <th>Return Condition</th>
+                    <th>Returned At</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in completed_returns %}
+                <tr>
+                    <td>{{ item.loan.asset.name }}</td>
+                    <td>{{ item.received_by }}</td>
+                    <td>{{ item.return_condition }}</td>
+                    <td>{{ item.returned_at }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="empty-state">No completed returns yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

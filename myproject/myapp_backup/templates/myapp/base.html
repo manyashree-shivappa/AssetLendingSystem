@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}AssetFlow{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'myapp/css/style.css' %}">
+</head>
+
+<body>
+
+{% if user.is_authenticated %}
+
+<div class="app-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">A</div>
+            <div>
+                <h2>AssetFlow</h2>
+                <small>Asset Operations</small>
+            </div>
+        </div>
+
+        <nav class="navigation">
+
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+
+            <a href="{% url 'assets' %}">Asset Catalogue</a>
+
+            <a href="{% url 'requests' %}">Asset Requests</a>
+
+            <a href="{% url 'transfers' %}">Transfers</a>
+
+            <a href="{% url 'returns' %}">Returns</a>
+
+            {% if user_role == "ADMIN" %}
+                <a href="{% url 'approvals' %}">Approvals</a>
+                <a href="{% url 'branches' %}">Branches</a>
+            {% endif %}
+
+            {% if user_role == "MANAGER" or user_role == "ADMIN" %}
+                <a href="{% url 'reports' %}">Reports</a>
+            {% endif %}
+
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="{% url 'logout' %}" class="logout-link">
+                Sign Out
+            </a>
+        </div>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div>
+                <h3>{% block page_heading %}Workspace{% endblock %}</h3>
+                <p>Multi-Branch Shared Asset Lending System</p>
+            </div>
+
+            <div class="user-info">
+                <strong>{{ user.username }}</strong>
+                <span>{{ user_role|default:"User" }}</span>
+            </div>
+
+        </header>
+
+        <!-- Notifications -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Individual Page Content -->
+        <section class="page-content">
+            {% block content %}
+            {% endblock %}
+        </section>
+
+    </main>
+
+</div>
+
+{% else %}
+
+    {% block public_content %}
+    {% endblock %}
+
+{% endif %}
+
+<script src="{% static 'myapp/js/main.js' %}"></script>
+
+</body>
+</html>

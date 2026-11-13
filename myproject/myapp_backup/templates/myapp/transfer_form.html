@@ -1,0 +1,54 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Record Transfer | AssetFlow{% endblock %}
+{% block page_heading %}Record Asset Transfer{% endblock %}
+{% block content %}
+
+<div class="form-container">
+    <div class="content-card">
+        <h1>New Branch Transfer</h1>
+        <p class="muted">Record the movement and custody of an asset.</p>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <label for="asset">Asset</label>
+            <select id="asset" name="asset" required>
+                <option value="">Select Asset</option>
+                {% for asset in assets %}
+                <option value="{{ asset.id }}">{{ asset.asset_code }} - {{ asset.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="from_branch">Sending Branch</label>
+            <select id="from_branch" name="from_branch" required>
+                <option value="">Select Sending Branch</option>
+                {% for branch in branches %}
+                <option value="{{ branch.id }}">{{ branch.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="to_branch">Receiving Branch</label>
+            <select id="to_branch" name="to_branch" required>
+                <option value="">Select Receiving Branch</option>
+                {% for branch in branches %}
+                <option value="{{ branch.id }}">{{ branch.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="sender">Sender Name</label>
+            <input type="text" id="sender" name="sender" required>
+
+            <label for="receiver">Receiver Name</label>
+            <input type="text" id="receiver" name="receiver" required>
+
+            <label for="notes">Transfer Notes</label>
+            <textarea id="notes" name="notes" rows="4"></textarea>
+
+            <div class="form-actions">
+                <button type="submit" class="primary-button">Save Transfer</button>
+                <a href="{% url 'transfers' %}" class="secondary-button">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

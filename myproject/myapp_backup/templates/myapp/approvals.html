@@ -1,0 +1,58 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Approvals | AssetFlow{% endblock %}
+{% block page_heading %}Request Approvals{% endblock %}
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>Request Approvals</h1>
+        <p>Review and decide on staff asset requests.</p>
+    </div>
+</div>
+
+<div class="content-card">
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Request</th>
+                    <th>Asset</th>
+                    <th>Staff Member</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Purpose</th>
+                    <th>Decision</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in requests %}
+                <tr>
+                    <td>#{{ item.id }}</td>
+                    <td>{{ item.asset.name }}</td>
+                    <td>{{ item.requested_by.username }}</td>
+                    <td>{{ item.start_date }}</td>
+                    <td>{{ item.end_date }}</td>
+                    <td>{{ item.purpose }}</td>
+                    <td>
+                        {% if item.status == "PENDING" %}
+                        <form method="POST" action="{% url 'approve_request' item.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="primary-button">Approve</button>
+                        </form>
+                        <form method="POST" action="{% url 'reject_request' item.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="danger-button">Reject</button>
+                        </form>
+                        {% else %}
+                            {{ item.status }}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="7" class="empty-state">No requests to review.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

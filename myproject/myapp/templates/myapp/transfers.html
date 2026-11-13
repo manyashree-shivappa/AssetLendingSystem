@@ -1,0 +1,183 @@
+{% extends 'myapp/base.html' %}
+{% block title %}Transfers | AssetFlow{% endblock %}
+{% block page_heading %}Asset Transfers{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <div>
+        <h1>Branch Transfers</h1>
+        <p>Track asset movement and custody between branches.</p>
+    </div>
+
+    <a href="{% url 'transfer_create' %}" class="primary-button">
+        + Record Transfer
+    </a>
+</div>
+
+<div class="content-card">
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Asset</th>
+                    <th>From Branch</th>
+                    <th>To Branch</th>
+                    <th>Sender</th>
+                    <th>Receiver</th>
+                    <th>Recorded By</th>
+                    <th>Transfer Time</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for transfer in transfers %}
+                <tr>
+                    <td>
+                        <strong>{{ transfer.asset.name }}</strong>
+                        <br>
+                        <small>{{ transfer.asset.asset_code }}</small>
+                    </td>
+
+                    <td>{{ transfer.from_branch.name }}</td>
+                    <td>{{ transfer.to_branch.name }}</td>
+                    <td>{{ transfer.sender|default:"—" }}</td>
+                    <td>{{ transfer.receiver|default:"—" }}</td>
+                    <td>{{ transfer.recorded_by|default:"—" }}</td>
+
+                    <td>
+                        {% if transfer.handoff_time %}
+                            {{ transfer.handoff_time|date:"d M Y, h:i A" }}
+                        {% else %}
+                            Not dispatched
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if transfer.status == "PENDING" %}
+                            <span class="status-badge pending">Pending</span>
+                        {% elif transfer.status == "IN_TRANSIT" %}
+                            <span class="status-badge in-transit">In Transit</span>
+                        {% elif transfer.status == "RECEIVED" %}
+                            <span class="status-badge received">Received</span>
+                        {% else %}
+                            {{ transfer.status }}
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <div class="transfer-actions">
+
+                            {% if transfer.status == "PENDING" %}
+                                <form method="POST"
+                                      action="{% url 'dispatch_transfer' transfer.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="primary-button">
+                                        Dispatch
+                                    </button>
+                                </form>
+                            {% endif %}
+
+                            {% if transfer.status == "IN_TRANSIT" %}
+                                <a href="{% url 'gps_tracking' transfer.id %}"
+                                   class="secondary-button">
+                                    GPS Tracking
+                                </a>
+
+                                <form method="POST"
+                                      action="{% url 'receive_transfer' transfer.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="primary-button">
+                                        Receive Asset
+                                    </button>
+                                </form>
+                            {% endif %}
+
+                            {% if transfer.status == "RECEIVED" %}
+                                <span class="received-label">
+                                    Received
+                                </span>
+                                {% if transfer.received_at %}
+                                    <small>
+                                        {{ transfer.received_at|date:"d M Y, h:i A" }}
+                                    </small>
+                                {% endif %}
+                            {% endif %}
+
+                        </div>
+                    </td>
+                </tr>
+
+                {% empty %}
+                <tr>
+                    <td colspan="9" class="empty-state">
+                        No transfers recorded yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .transfer-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-width: 120px;
+    }
+
+    .transfer-actions form {
+        margin: 0;
+    }
+
+    .transfer-actions button,
+    .transfer-actions a {
+        display: inline-block;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .status-badge.pending {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .status-badge.in-transit {
+        background: #dbeafe;
+        color: #1d4ed8;
+    }
+
+    .status-badge.received {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+    .secondary-button {
+        padding: 8px 12px;
+        border-radius: 7px;
+        background: #e0e7ff;
+        color: #3730a3;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .received-label {
+        color: #15803d;
+        font-weight: 600;
+    }
+</style>
+
+{% endblock %}
