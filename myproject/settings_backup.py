@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-bj%a!4sol9p2qav(i#lh%!w*-wr-cf*@z(knhz42ii5mw1!a^v')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'RENDER' not in os.environ
+DEBUG = os.environ.get('RENDER', 'False') != 'true'
 
 # Allowed hosts for Render and local development
 ALLOWED_HOSTS = ['assetlendingsystem.onrender.com', 'localhost', '127.0.0.1']
